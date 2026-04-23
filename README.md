@@ -127,7 +127,7 @@ To get started with SkiaSharp for Unity, follow these steps:
 2. Click the `+` button in the top-left corner and select Add package from git URL
 3. Enter the following URL and click `Add`
 
-`https://github.com/ammariqais/SkiaForUnity.git?path=SkiaUnity/Packages/com.ngx.skiaforunity/Runtime`
+`https://github.com/ngx-interactive/SkiaForUnity.git?path=/SkiaUnity/Packages/com.ngx.skiaforunity#main`
 
 3. Import the SkiaSharp package into your Unity project.
 
