@@ -5,7 +5,7 @@ using Topten.RichTextKit;
 namespace SkiaSharp.Unity.HB {
     /// <summary>
     /// Parses simple rich text tags and adds styled runs to a TextBlock.
-    /// Supported tags: <b>, <i>, <u>, <s>, <sup>, <sub>,
+    /// Supported tags: <b>, <em>, <i>, <u>, <s>, <sup>, <sub>,
     /// <size=N>, <color=#RRGGBB>, <color=#RRGGBBAA>, <color=name>
     /// </summary>
     public static class HBRichTextParser {
@@ -66,6 +66,7 @@ namespace SkiaSharp.Unity.HB {
 
                     switch (tagName) {
                         case "b":
+                        case "em":
                         case "i":
                         case "u":
                         case "s":
@@ -101,6 +102,9 @@ namespace SkiaSharp.Unity.HB {
 
                         switch (tagName) {
                             case "b":
+                                current.bold = true;
+                                break;
+                            case "em":
                                 current.bold = true;
                                 break;
                             case "i":
