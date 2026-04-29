@@ -5,8 +5,9 @@ using Topten.RichTextKit;
 namespace SkiaSharp.Unity.HB {
     /// <summary>
     /// Parses simple rich text tags and adds styled runs to a TextBlock.
-    /// Supported tags: <b>, <em>, <i>, <u>, <s>, <sup>, <sub>,
-    /// <size=N>, <color=#RRGGBB>, <color=#RRGGBBAA>, <color=name>
+        /// Supported tags: <b>, <em>, <i>, <u>, <s>, <sup>, <sub>,
+        /// <br>, <br/>, <br /> (line break),
+        /// <size=N>, <color=#RRGGBB>, <color=#RRGGBBAA>, <color=name>
     /// </summary>
     public static class HBRichTextParser {
 
@@ -62,6 +63,31 @@ namespace SkiaSharp.Unity.HB {
                     if (eqIdx >= 0) {
                         tagValue = tagName.Substring(eqIdx + 1);
                         tagName = tagName.Substring(0, eqIdx);
+                    }
+
+                    // Void <br> (and XHTML-style </br> consume-only): line break, no stack push/pop
+                    if (tagName == "br" && isClosing) {
+                        if (i > runStart) {
+                            string seg = text.Substring(runStart, i - runStart);
+                            AddStyledRun(tb, seg, baseStyle, current);
+                        }
+                        runStart = closeIdx + 1;
+                        i = runStart;
+                        continue;
+                    }
+                    if (!isClosing && tagName.Length >= 2
+                        && tagName.StartsWith("br", System.StringComparison.Ordinal)) {
+                        string afterBr = tagName.Length == 2 ? "" : tagName.Substring(2).Trim();
+                        if (afterBr == "" || afterBr == "/") {
+                            if (i > runStart) {
+                                string seg = text.Substring(runStart, i - runStart);
+                                AddStyledRun(tb, seg, baseStyle, current);
+                            }
+                            AddStyledRun(tb, "\n", baseStyle, current);
+                            runStart = closeIdx + 1;
+                            i = runStart;
+                            continue;
+                        }
                     }
 
                     switch (tagName) {
